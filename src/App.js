@@ -8,7 +8,9 @@ import Loading from "./Loading";
 import AuthorsList from "./AuthorsList";
 import AuthorDetail from "./AuthorDetail";
 import BookList from "./BookList";
+import { connect } from "react-redux";
 
+import { fetchAllBooks, fetchAllAuthors } from "./redux/actions";
 const instance = axios.create({
   baseURL: "https://the-index-api.herokuapp.com"
 });
@@ -20,31 +22,9 @@ class App extends Component {
     loading: true
   };
 
-  fetchAllAuthors = async () => {
-    const res = await instance.get("/api/authors/");
-    return res.data;
-  };
-
-  fetchAllBooks = async () => {
-    const res = await instance.get("/api/books/");
-    return res.data;
-  };
-
   async componentDidMount() {
-    try {
-      const authorsReq = this.fetchAllAuthors();
-      const booksReq = this.fetchAllBooks();
-      const authors = await authorsReq;
-      const books = await booksReq;
-
-      this.setState({
-        authors: authors,
-        books: books,
-        loading: false
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    this.props.getAuthors();
+    this.props.getBooks();
   }
 
   getView = () => {
@@ -84,4 +64,14 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    getAuthors: () => dispatch(fetchAllAuthors()),
+    getBooks: () => dispatch(fetchAllBooks())
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

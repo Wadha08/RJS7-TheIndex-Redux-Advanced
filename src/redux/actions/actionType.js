@@ -1,0 +1,2 @@
+export const FETCH_ALL_AUTHORS = "FETCH_ALL_AUTHORS";
+export const FETCH_ALL_BOOKS = "FETCH_ALL_BOOKS";
